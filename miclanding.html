@@ -47,7 +47,7 @@
     <div id="bao-gia" class="fade-in">
       <div class="shadow-xl border border-slate-200/70 rounded-2xl bg-white">
         <div class="p-6 border-b"><h3 class="text-lg font-semibold flex items-center gap-2"><i data-lucide="shield-check" class="w-5 h-5"></i>Nhận báo giá miễn phí</h3></div>
-        <form class="p-6 grid grid-cols-1 gap-4" id="quote-form">
+        <form class="p-6 grid grid-cols-1 gap-4" id="quote-form" action="https://formsubmit.co/chiennv@mic.vn" method="POST">
           <div class="grid gap-2"><label for="name" class="text-sm font-medium">Họ & tên</label><input id="name" name="name" required placeholder="Nguyễn Văn A" class="h-10 rounded-md border px-3 outline-none focus:ring-2 focus:ring-primary/40"/></div>
           <div class="grid md:grid-cols-2 gap-4">
             <div class="grid gap-2"><label for="phone" class="text-sm font-medium">Số điện thoại</label><input id="phone" name="phone" required placeholder="090x xxx xxx" class="h-10 rounded-md border px-3 outline-none focus:ring-2 focus:ring-primary/40"/></div>
@@ -161,9 +161,57 @@
   <div class="border-t py-4 text-center text-xs text-slate-500">© <span id="y"></span> MIC THỐNG NHẤT. All rights reserved.</div>
 </footer>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"InsuranceAgency","name":"MIC THỐNG NHẤT","telephone":"+84-94-666-5968","email":"Chiennv@mic.vn","address":{"@type":"PostalAddress","streetAddress":"198A Đường Trần Bình Trọng, Phường Chợ Quán","addressLocality":"TP. Hồ Chí Minh","addressCountry":"VN"}}</script>
-<script>window.addEventListener('DOMContentLoaded',()=>{window.lucide&&window.lucide.createIcons&&window.lucide.createIcons();document.getElementById('y').textContent=new Date().getFullYear();const t=document.querySelectorAll('.tab-btn'),e=document.querySelectorAll('.tab-content'),n=o=>{t.forEach(t=>{t.dataset.tab===o?(t.classList.add('bg-primary','text-white','border-primary')):t.classList.remove('bg-primary','text-white','border-primary')});e.forEach(t=>t.classList.toggle('hidden',t.id!=='tab-'+o))};n('car');t.forEach(t=>t.addEventListener('click',()=>n(t.dataset.tab)));const o=document.getElementById('quote-form'),a=document.getElementById('submit-msg');o.addEventListener('submit',t=>{t.preventDefault();const e=new FormData(o),n=e.get('name'),d=e.get('phone');alert(`Đã nhận yêu cầu báo giá!
-Khách hàng: ${n}
-SĐT: ${d}.
-Chúng tôi sẽ liên hệ trong ít phút.`),a.classList.remove('hidden'),o.reset(),setTimeout(()=>a.classList.add('hidden'),5e3)})});</script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    window.lucide && window.lucide.createIcons && window.lucide.createIcons();
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    const tabs = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    const switchTab = (tab) => {
+      tabs.forEach(t => {
+        if (t.dataset.tab === tab) {
+          t.classList.add('bg-primary', 'text-white', 'border-primary');
+        } else {
+          t.classList.remove('bg-primary', 'text-white', 'border-primary');
+        }
+      });
+      tabContents.forEach(c => c.classList.toggle('hidden', c.id !== 'tab-' + tab));
+    };
+
+    switchTab('car');
+    tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+    const form = document.getElementById('quote-form');
+    const submitMsg = document.getElementById('submit-msg');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          submitMsg.classList.remove('hidden');
+          form.reset();
+          setTimeout(() => submitMsg.classList.add('hidden'), 5000);
+        } else {
+          alert('Có lỗi xảy ra, vui lòng thử lại.');
+        }
+      })
+      .catch(error => {
+        alert('Có lỗi xảy ra, vui lòng thử lại.');
+        console.error('Error:', error);
+      });
+    });
+  });
+</script>
 </body>
 </html>
